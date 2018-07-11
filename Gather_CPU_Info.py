@@ -52,8 +52,3 @@ def CPU_Info():
         cpu_list.append(cpu_dict)
     return cpu_list
 
-CPU_Info=CPU_Info()
-for CPU in CPU_Info:
-    for i in CPU:
-        print(i,CPU[i])
-

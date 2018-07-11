@@ -23,7 +23,3 @@ def Board_Info():
         board_dict['Version']=physical_board.Version
         borad_list.append(board_dict)
     return borad_list
-borad_list=Board_Info()
-for board in borad_list:
-    for borad_item in board:
-        print(borad_item,board[borad_item])

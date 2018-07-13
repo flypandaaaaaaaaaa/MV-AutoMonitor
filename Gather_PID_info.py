@@ -9,6 +9,7 @@ def PID_info():
             proc = psutil.Process(i)
             PID_dict['PID']=i
             PID_dict['memory_percent']=proc.memory_percent()
+            PID_dict['cpu_percent']=proc.cpu_percent()
             PID_dict['proc_name']=proc.name()
             PID_dict['proc_exe']=proc.exe()
             PID_list.append(PID_dict)

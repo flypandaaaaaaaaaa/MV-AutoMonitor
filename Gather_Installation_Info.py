@@ -1,7 +1,7 @@
 import winreg
-
-sub_key = ['SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall',
-           'SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall']
+#-*- coding:utf-8 -*-
+sub_key = ['SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall',
+           'SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall']
 
 software_name = []
 
@@ -16,6 +16,7 @@ for i in sub_key:
             software_name.append(DisplayName)
         except WindowsError:
             pass
+
 
 software_name = list(set(software_name))
 software_name = sorted(software_name)

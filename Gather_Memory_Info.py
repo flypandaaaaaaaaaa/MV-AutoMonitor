@@ -1,4 +1,4 @@
-import wmi
+import wmi,datetime
 import psutil
 c = wmi.WMI()
 def memory_static_info():
@@ -28,14 +28,18 @@ def memory_static_info():
         memory_dict['Tag'] = physical_memory.Tag
         memory_dict['TotalWidth'] = physical_memory.TotalWidth
         memory_dict['TypeDetail'] = physical_memory.TypeDetail
-        memory_list.append(memory_dict)
+        memory_static_list.append(memory_dict)
     return memory_static_list
 
 def memory_dynamic_info():
     memory_dynamic_dict={}
     mem_info=psutil.virtual_memory()
+    memory_dynamic_dict['Collection_time']=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     memory_dynamic_dict['available']=mem_info[0]
     memory_dynamic_dict['percent']=mem_info[1]
     memory_dynamic_dict['used']=mem_info[2]
     memory_dynamic_dict['free']=mem_info[3]
     return memory_dynamic_dict
+
+
+

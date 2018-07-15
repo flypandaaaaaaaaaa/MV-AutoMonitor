@@ -1,10 +1,11 @@
-import wmi
+import wmi,datetime
 
 def Board_Info():
     c = wmi.WMI()
     borad_list=[]
     for physical_board in c.Win32_BaseBoard():
         board_dict={}
+        board_dict['Collection_time'] = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         board_dict['Caption']=physical_board.Caption
         board_dict['ConfigOptions']=physical_board.ConfigOptions
         board_dict['CreationClassName']=physical_board.CreationClassName

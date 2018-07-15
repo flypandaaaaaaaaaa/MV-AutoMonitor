@@ -1,4 +1,4 @@
-import psutil
+import psutil,datetime
 
 def PID_info():
     pid = psutil.pids()
@@ -12,9 +12,8 @@ def PID_info():
             PID_dict['cpu_percent']=proc.cpu_percent()
             PID_dict['proc_name']=proc.name()
             PID_dict['proc_exe']=proc.exe()
+            PID_dict['Collection_time']=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             PID_list.append(PID_dict)
         except psutil.AccessDenied:
-            print("psutil.AccessDenied")
+            pass
     return PID_list
-
-print(PID_info())

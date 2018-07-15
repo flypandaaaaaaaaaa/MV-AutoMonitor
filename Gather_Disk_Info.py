@@ -1,10 +1,12 @@
 import wmi
 import psutil
+import datetime
 def disk_static_info():
     c = wmi.WMI()
     disk_static_list=[]
     for physical_disk in c.Win32_DiskDrive():
         disk_dict={}
+        disk_dict['Collection_time'] = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         disk_dict['BytesPerSector']=physical_disk.BytesPerSector
         disk_dict['Capabilities']=physical_disk.Capabilities
         disk_dict['CapabilityDescriptions'] = physical_disk.CapabilityDescriptions
@@ -40,18 +42,18 @@ def disk_static_info():
         disk_dict['TotalSectors'] = physical_disk.TotalSectors
         disk_dict['TotalTracks'] = physical_disk.TotalTracks
         disk_dict['TracksPerCylinder'] = physical_disk.TracksPerCylinder
-        disk_list.append(disk_dict)
+        disk_static_list.append(disk_dict)
     return disk_static_list
 
 def disk_dynamic_info():
     disk_dynamic_list=[]
     for disk in psutil.disk_partitions():
         disk_dynamic_dict={}
+        disk_dynamic_dict['Collection_time'] = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         disk_dynamic_dict['device']=disk[0]
         disk_dynamic_dict['mountpoint']=disk[1]
         disk_dynamic_dict['fstype']=disk[2]
         disk_dynamic_dict['opts']=disk[3]
-        disk_dynamic_list.append(disk_dynamic_dict)
 
         disk_usage=psutil.disk_usage(disk_dynamic_dict['device'])
 
@@ -59,6 +61,5 @@ def disk_dynamic_info():
         disk_dynamic_dict['used']=disk_usage[1]
         disk_dynamic_dict['free']=disk_usage[2]
         disk_dynamic_dict['percent']=disk_usage[3]
+        disk_dynamic_list.append(disk_dynamic_dict)
     return disk_dynamic_list
-
-psutil.disk_io_counters()

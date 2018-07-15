@@ -1,10 +1,11 @@
-import wmi
+import wmi,datetime
 
 def CPU_Info():
     c = wmi.WMI()
     cpu_list=[]
     for physical_cpu in c.Win32_Processor():
         cpu_dict={}
+        cpu_dict['Collection_time'] = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         cpu_dict['AddressWidth']=physical_cpu.AddressWidth
         cpu_dict['Architecture']=physical_cpu.Architecture
         cpu_dict['AssetTag']=physical_cpu.AssetTag

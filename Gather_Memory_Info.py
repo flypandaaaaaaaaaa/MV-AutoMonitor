@@ -5,6 +5,7 @@ def memory_static_info():
     memory_static_list=[]
     for physical_memory in c.Win32_PhysicalMemory():
         memory_dict={}
+        memory_dict['Collection_time'] = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         memory_dict['Attributes']=physical_memory.Attributes
         memory_dict['BankLabel'] = physical_memory.BankLabel
         memory_dict['Capacity']=physical_memory.Capacity

@@ -9,6 +9,7 @@ class board_info(Base):
 
     id = Column(Integer,primary_key=True,autoincrement=True)
     Client_id=Column(Integer)
+    Collection_time=Column(String(100))
     Caption = Column(String(100))
     ConfigOptions= Column(String(100))
     CreationClassName= Column(String(100))
@@ -35,6 +36,7 @@ class cpu_info(Base):
 
     id = Column(Integer,primary_key=True,autoincrement=True)
     Client_id=Column(Integer)
+    Collection_time=Column(String(100))
     AddressWidth = Column(String(100))
     Architecture= Column(String(100))
     AssetTag= Column(String(100))
@@ -87,6 +89,7 @@ class disk_static_info(Base):
 
     id = Column(Integer,primary_key=True,autoincrement=True)
     Client_id=Column(Integer)
+    Collection_time=Column(String(100))
     BytesPerSector= Column(String(100))
     Capabilities= Column(String(100))
     CapabilityDescriptions= Column(String(100))
@@ -130,6 +133,7 @@ class disk_dynamic_info(Base):
 
     id = Column(Integer,primary_key=True,autoincrement=True)
     Client_id=Column(Integer)
+    Collection_time=Column(String(100))
     device= Column(String(100))
     mountpoint= Column(String(100))
     fstype= Column(String(100))
@@ -143,9 +147,9 @@ class disk_dynamic_info(Base):
 class memory_static_info(Base):
 
     __tablename__='memory_static_info'
-
     id = Column(Integer,primary_key=True,autoincrement=True)
-    Client_id=Column(Integer)
+    Client_id= Column(Integer)
+    Collection_time=Column(String(100))
     Attributes= Column(String(100))
     BankLabel= Column(String(100))
     Capacity= Column(String(100))
@@ -177,7 +181,7 @@ class memory_dynamic_info(Base):
     __tablename__='memory_dynamic_info'
 
     id = Column(Integer,primary_key=True,autoincrement=True)
-    Collection_time=Column(String(100)
+    Collection_time=Column(String(100))
     Client_id=Column(Integer)
     available= Column(String(100))
     percent= Column(String(100))
@@ -185,12 +189,37 @@ class memory_dynamic_info(Base):
     free= Column(String(100))
 
 
-
 class installation_info(Base):
 
-    __tablename__='installation_info'
 
+    __tablename__='installation_info'
     id = Column(Integer,primary_key=True,autoincrement=True)
     Client_id=Column(Integer)
+    Collection_time=Column(String(100))
     software= Column(String(100))
-    Collection_Time=Column(DateTime)
+
+
+class pid_info(Base):
+
+
+    __tablename__='pid_info'
+    id = Column(Integer,primary_key=True,autoincrement=True)
+    Client_id=Column(Integer)
+    Collection_time=Column(String(100))
+    PID= Column(String(100))
+    memory_percent= Column(String(100))
+    cpu_percent= Column(String(100))
+    proc_name= Column(String(100))
+    proc_exe= Column(String(1000))
+
+
+class service_info(Base):
+
+
+    __tablename__='service_info'
+    id = Column(Integer,primary_key=True,autoincrement=True)
+    Client_id=Column(Integer)
+    Collection_time=Column(String(100))
+    srv_name= Column(String(100))
+    StartMode= Column(String(100))
+    State= Column(String(100))

@@ -2,29 +2,31 @@ import yaml, os
 from MySQL_Model_Cls import cpu_info
 from DB_Access import DBSession
 from Server_Config import *
+import Filter_File_cls
 
-'''获取CPU目录下所有的文件列表'''
+#获取CPU目录下所有的文件列表
 try:
-    CPU_File_List = os.listdir(CPU_FilePath)
+    filter_func=Filter_File_cls.file_filename(cpu_file_filter)
+    CPU_File_List = list(filter(filter_func.filterfile,os.listdir(Info_FilePath)))
 except Exception as e:
-    print("Get CPU File list Fail")
+    print("获取CPU文件列表失败")
 
-'''打开一个数据库Session'''
+#打开一个数据库Session
 session = DBSession()
 
-'''开始一个循环，录入所有的文件内容'''
+#开始一个循环，录入所有的文件内容
 for single_file in CPU_File_List:
 
-    '''获取文件头，客户端ID'''
+    #获取文件头，客户端ID
     Client_id = single_file.split('_')[0]
 
-    '''打开文件'''
-    with open(os.path.join(CPU_FilePath, single_file), 'r') as f:
+    #打开文件
+    with open(os.path.join(Info_FilePath, single_file), 'r') as f:
         cpu_info_list = yaml.load(f.read())
         for single_record in cpu_info_list:
 
-            '''开始把记录载入数据库'''
-            new_cpu_record = cpu_info(Client_id=Client_id, AddressWidth=single_record['AddressWidth'],
+            #开始把记录载入数据库
+            new_cpu_record = cpu_info(Client_id=Client_id, Collection_time=single_record['Collection_time'],AddressWidth=single_record['AddressWidth'],
                                       Architecture=single_record['Architecture'],
                                       AssetTag=single_record['AssetTag'],
                                       Availability=single_record['Availability'],
@@ -70,12 +72,12 @@ for single_file in CPU_File_List:
                                       VMMonitorModeExtensions=single_record['VMMonitorModeExtensions']
                                       )
 
-            '''开始提交记录'''
+            #开始提交记录
             try:
                 session.add(new_cpu_record)
                 session.commit()
             except Exception as e:
-                print("Data Load into DB error")
+                print("数据载入失败")
 
-'''关闭数据库链接'''
+#关闭数据库链接
 session.close()

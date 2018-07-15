@@ -1,31 +1,27 @@
-import Gather_Board_Info,Gather_CPU_Info,Gather_Memory_Info
-import socket,getpass,datetime,yaml,uuid
-from Client_Config import *
-nowTime=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-hostname = socket.gethostname()
-username=getpass.getuser()
-ip = socket.gethostbyname(hostname)
-ipList = socket.gethostbyname_ex(hostname)
-
-#客户端号+计算机名+登陆用户名+信息类型+全局唯一串号+日期.txt
-board_info_list=Gather_Board_Info.Board_Info()
-yaml_doc=yaml.dump(board_info_list)
-with open (File_Gen_Path+Client_ID+'_'+hostname+'_'+username+'_'+'board'+'_'+str(uuid.uuid1())+'_'+nowTime+File_Name_Subfix,'w') as f:
-    f.write(yaml_doc)
+import Gather_Board_Info,Gather_CPU_Info,Gather_Memory_Info,Gather_Disk_Info,Gather_Installation_Info,Gather_PID_info,Gather_Service_Info
+import all_file_gen_cls
+from Client_Config import File_Name_Subfix,File_Gen_Path,Client_ID
 
 
-cpu_info_list=Gather_CPU_Info.CPU_Info()
-yaml_doc=yaml.dump(cpu_info_list)
-with open (File_Gen_Path+Client_ID+'_'+hostname+'_'+username+'_'+'cpu'+'_'+str(uuid.uuid1())+'_'+nowTime+File_Name_Subfix,'w') as f:
-    f.write(yaml_doc)
+ob_gen_board_info=all_file_gen_cls.all_info_gen(Gather_Board_Info.Board_Info(),'board',File_Gen_Path,Client_ID,File_Name_Subfix)
+ob_gen_cpu_info=all_file_gen_cls.all_info_gen(Gather_CPU_Info.CPU_Info(),'cpu',File_Gen_Path,Client_ID,File_Name_Subfix)
+ob_gen_mem_dyn=all_file_gen_cls.all_info_gen(Gather_Memory_Info.memory_dynamic_info(),'memory_dynamic',File_Gen_Path,Client_ID,File_Name_Subfix)
+ob_gen_mem_sta=all_file_gen_cls.all_info_gen(Gather_Memory_Info.memory_static_info(),'memory_static',File_Gen_Path,Client_ID,File_Name_Subfix)
+ob_gen_disk_dyn=all_file_gen_cls.all_info_gen(Gather_Disk_Info.disk_dynamic_info(),'disk_dynamic',File_Gen_Path,Client_ID,File_Name_Subfix)
+ob_gen_disk_sta=all_file_gen_cls.all_info_gen(Gather_Disk_Info.disk_static_info(),'disk_static',File_Gen_Path,Client_ID,File_Name_Subfix)
+#ob_gen_install_info=all_file_gen_cls.all_info_gen(Gather_Installation_Info.installation_info(),'installation',File_Gen_Path,Client_ID,File_Name_Subfix)
+ob_gen_pid_info=all_file_gen_cls.all_info_gen(Gather_PID_info.PID_info(),'pid',File_Gen_Path,Client_ID,File_Name_Subfix)
+ob_gen_srv_info=all_file_gen_cls.all_info_gen(Gather_Service_Info.service_info(),'service',File_Gen_Path,Client_ID,File_Name_Subfix)
 
-
-memory_dynamic_info_list=Gather_Memory_Info.memory_dynamic_info()
-yaml_doc=yaml.dump(memory_dynamic_info_list)
-with open (File_Gen_Path+Client_ID+'_'+hostname+'_'+username+'_'+'memory_dynamic'+'_'+str(uuid.uuid1())+'_'+nowTime+File_Name_Subfix,'w') as f:
-    f.write(yaml_doc)
-
-memory_static_info_list=Gather_Memory_Info.memory_static_info()
-yaml_doc=yaml.dump(memory_static_info_list)
-with open (File_Gen_Path+Client_ID+'_'+hostname+'_'+username+'_'+'memory_static'+'_'+str(uuid.uuid1())+'_'+nowTime+File_Name_Subfix,'w') as f:
-    f.write(yaml_doc)
+ob_gen_board_info.gen_file()
+ob_gen_cpu_info.gen_file()
+ob_gen_mem_dyn.gen_file()
+ob_gen_mem_sta.gen_file()
+ob_gen_disk_dyn.gen_file()
+ob_gen_disk_sta.gen_file()
+ob_gen_pid_info.gen_file()
+ob_gen_srv_info.gen_file()
+# try:
+#     ob_gen_install_info.gen_file()
+# except Exception as e:
+#     print('fail')

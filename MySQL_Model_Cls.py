@@ -223,3 +223,36 @@ class service_info(Base):
     srv_name= Column(String(100))
     StartMode= Column(String(100))
     State= Column(String(100))
+
+class clt_filelist(Base):
+
+    __tablename__='clt_filelist'
+    id = Column(Integer,primary_key=True,autoincrement=True)
+    file_name= Column(String(100))
+    file_path= Column(String(100))
+    file_type=Column(String(20))
+    file_time=Column(String(100))
+    State= Column(String(100))
+
+
+class clt_filelist_his(Base):
+    __tablename__ = 'clt_filelist_his'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_name = Column(String(100))
+    file_path = Column(String(100))
+    file_type = Column(String(20))
+    file_time = Column(String(100))
+    State = Column(String(100))
+
+class file_type(Base):
+    __tablename__ = 'file_type'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_type = Column(String(100))
+    file_type_name = Column(String(100))
+
+class file_state(Base):
+    __tablename__ = 'file_state'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    file_state = Column(String(100))
+    file_state_name = Column(String(100))
+

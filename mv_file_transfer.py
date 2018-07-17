@@ -6,4 +6,4 @@ def mv_upload():
         mv_sftp=sftp(host,port,username,password)
         mv_sftp.batch_upload(LocalPath,RemotePath)
     except Exception as e:
-        print('fail to upload')
+        print('上传失败',e)

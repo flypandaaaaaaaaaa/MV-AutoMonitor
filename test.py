@@ -3,6 +3,7 @@ from mv_file_transfer import mv_upload
 import schedule,time
 
 
+
 #生成主板信息文件
 schedule.every(5).seconds.do(mv_gen_boardfile)
 

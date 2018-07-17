@@ -1,5 +1,6 @@
 DB_Ccnnection='mysql://monitor:xxasdop9!@47.104.161.61:4306/monitor?charset=utf8'
 Info_FilePath='D://Load_Info//'
+bakup_path='D:\\Server_Backup\\'
 board_file_filter='board'
 cpu_file_filter='cpu'
 disk_file_filter='disk'

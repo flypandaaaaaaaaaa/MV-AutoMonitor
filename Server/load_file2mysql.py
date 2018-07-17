@@ -12,4 +12,3 @@ def mv_loadfile2mysql(infopath):
 
 
 
-mv_loadfile2mysql(Info_FilePath)

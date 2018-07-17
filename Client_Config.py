@@ -1,16 +1,16 @@
 #文件生产的路径
-File_Gen_Path='C:\\microvast\\File_Gen\\'
-File_Backup='C:\\microvast\\File_Bakup\\'
-Log_Path='D:\\microvast\\Log\\'
+File_Gen_Path='C:\\\\File_Gen\\'
+File_Backup='C:\\\\File_Bakup\\'
+Log_Path='C:\\\\Log\\'
 #生产文件后缀名
 File_Name_Subfix='.txt'
 
 #客户端号，标明全局唯一ID
-Client_ID='1700247'
+Client_ID=''
 
 ##FTP相关配置
 host = ''
-port = 22
+port = 
 username = ''
 password = ''
 LocalPath=File_Gen_Path

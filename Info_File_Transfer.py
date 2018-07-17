@@ -16,7 +16,7 @@ class sftp(object):
         try:
             sftp.put(os.path.join(basedir, file), remote+file)  # 上传文件
         except Exception as e:
-            print('upload exception:', e)
+            print('上传失败', e)
         sf.close()
 
     def batch_upload(self, path, remote):
@@ -32,10 +32,10 @@ class sftp(object):
             try:
                 sftp.put(os.path.join(path, file), remote+file)  # 上传文件
             except Exception as e:
-                print("上传失败")
+                print("上传失败",e)
 
             try:
                 shutil.move(os.path.join(path, file), os.path.join(File_Backup, file))
             except Exception as e:
-                print("移动文件失败")
+                print("移动文件失败",e)
         sf.close()

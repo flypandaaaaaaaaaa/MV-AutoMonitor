@@ -34,6 +34,8 @@ class load_file_indb(object):
                 file_type = 'X'
         elif service_file_filter in filename:
             file_type = 'S'
+        elif net_file_filter in filename:
+            file_type = 'N'
         else:
             file_type = 'X'
 

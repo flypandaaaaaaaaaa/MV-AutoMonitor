@@ -224,6 +224,21 @@ class service_info(Base):
     StartMode= Column(String(100))
     State= Column(String(100))
 
+
+class net_info(Base):
+
+
+    __tablename__='net_info'
+    id = Column(Integer,primary_key=True,autoincrement=True)
+    Client_id=Column(Integer)
+    Collection_time=Column(String(100))
+    IP= Column(String(100))
+    Netmask= Column(String(100))
+    MAC= Column(String(100))
+    Gateway=Column(String(100))
+    DHCP=Column(String(100))
+    DNS=Column(String(100))
+
 class clt_filelist(Base):
 
     __tablename__='clt_filelist'

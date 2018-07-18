@@ -1,37 +1,44 @@
-from Info_File_Gen import mv_gen_boardfile,mv_gen_cpufile,mv_gen_disk_dyn,mv_gen_disk_sta,mv_gen_installation,mv_gen_mem_dyn,mv_gen_mem_sta,mv_gen_pidfile,mv_gen_srvifile
-from mv_file_transfer import mv_upload
-import schedule,time
+
+uuid='sdfghf34543'
+local_path='D:\\'
 
 
 
-#生成主板信息文件
-schedule.every(5).seconds.do(mv_gen_boardfile)
 
-#生成CPU信息文件
-schedule.every(5).seconds.do(mv_gen_cpufile)
+host='192.168.29.250'
+port=22
+username='root'
+password='123456'
+remote_path='/tmp/'
 
-#生成硬盘静态信息文件
-schedule.every(5).seconds.do(mv_gen_disk_sta)
 
-#生成硬盘动态信息文件
-schedule.every(5).seconds.do(mv_gen_disk_dyn)
+import shutil,winreg
+import paramiko,os
 
-#生成安装信息文件
-schedule.every(5).seconds.do(mv_gen_installation)
+def get_desktop():
+    key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\',)
+    return winreg.QueryValueEx(key, "Desktop")[0]
 
-#生成内存信息文件
-schedule.every(5).seconds.do(mv_gen_mem_dyn)
-schedule.every(5).seconds.do(mv_gen_mem_sta)
+def file_download(host,port,username,password,remote_path, local_path,uuid):
+    sf = paramiko.Transport((host,port))
+    sf.connect(username=username, password=password)
+    sftp = paramiko.SFTPClient.from_transport(sf)
+    try:
 
-#生成进程信息文件
-schedule.every(5).seconds.do(mv_gen_pidfile)
+        ###命令文件模板将带入一个UUID，根据这个值去找到对应的文件
 
-#生成服务信息文件
-schedule.every(5).seconds.do(mv_gen_srvifile)
+        dir = sftp.listdir(remote_path)
+        for filename in dir:
+            if uuid in filename:
+                ##当发现第一个文件中包含UUID时直接退出本次循环，开始下载操作
+                break
+        sftp.get(remote_path + filename, os.path.join(local_path, filename))  # 下载文件
+        sftp.remove(remote_path + filename)
+    except Exception as e:
+        print('下载文件失败', e)
+    sf.close()
+    desktop=get_desktop()
+    shutil.move(os.path.join(local_path,filename),desktop)
 
-#FTP传输所有信息文件到服务器
-schedule.every(5).seconds.do(mv_upload)
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+file_download(host,port,username,password,remote_path, local_path,uuid)

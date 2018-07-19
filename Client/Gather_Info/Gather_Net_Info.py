@@ -1,4 +1,4 @@
-import netifaces
+# import netifaces
 import subprocess
 import datetime
 

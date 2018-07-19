@@ -1,5 +1,5 @@
 import socket, getpass, datetime, yaml, uuid
-class all_info_gen(object):
+class InfoGen(object):
 
 
     def __init__(self,info_func,info_name,file_gen_path,Client_ID,File_Name_Subfix):

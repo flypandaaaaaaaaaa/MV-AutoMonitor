@@ -1,9 +1,9 @@
 import os,datetime
 from Server_Config import *
-from MySQL_Model_Cls import clt_filelist,clt_filelist_his
+from Server.DB.MySQLModel import clt_filelist,clt_filelist_his
 from DB_Access import DBSession
 import shutil
-class load_file_indb(object):
+class LoadFile(object):
 
     def __init__(self,filepath):
         self.__filepath=filepath

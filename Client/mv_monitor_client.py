@@ -1,65 +1,80 @@
-from Info_File_Gen import mv_gen_boardfile,mv_gen_cpufile,mv_gen_disk_dyn,mv_gen_disk_sta,mv_gen_installation,mv_gen_mem_dyn,mv_gen_mem_sta,mv_gen_pidfile,mv_gen_srvifile,mv_gen_netfile
+from Client.Info_File_Gen import mv_board
+from Client.Info_File_Gen import mv_cpu
+from Client.Info_File_Gen import mv_diskdyn
+from Client.Info_File_Gen import mv_disksta
+from Client.Info_File_Gen import mv_install
+from Client.Info_File_Gen import mv_memdyn
+from Client.Info_File_Gen import mv_memsta
+from Client.Info_File_Gen import mv_net
+from Client.Info_File_Gen import mv_pid
+from Client.Info_File_Gen import mv_srv
 from mv_file_transfer import mv_upload
-import schedule,time,os
-from Client_Config import  *
+import schedule
+import os
+import time
+from Client.Client_Config import WORKPATH,BACKUP,LOGPATH
 
 
-if  not os.path.exists(File_Gen_Path):
+if  not os.path.exists(WORKPATH):
     try:
-        os.makedirs(File_Gen_Path)
+        os.makedirs(WORKPATH)
     except Exception as e:
         print('创建失败',e)
-elif not os.path.exists(File_Backup):
+if not os.path.exists(BACKUP):
     try:
-        os.makedirs(File_Backup)
+        os.makedirs(BACKUP)
     except Exception as e:
         print('创建失败',e)
-else:
-    pass
+
+if not os.path.exists(LOGPATH):
+    try:
+        os.makedirs(LOGPATH)
+    except Exception as e:
+        print('创建失败',e)
 
 # # #生成主板信息文件
-# # schedule.every().hour.do(mv_gen_boardfile)
-# schedule.every().minute.do(mv_gen_boardfile)
+# # schedule.every().hour.do(mv_board)
+# schedule.every(5).seconds.do(mv_board)
 #
 # # #生成CPU信息文件
-# # schedule.every().hour.do(mv_gen_cpufile)
-# schedule.every().minute.do(mv_gen_cpufile)
+# # schedule.every().hour.do(mv_cpu)
+# schedule.every(5).seconds.do(mv_cpu)
 #
 # # #生成硬盘静态信息文件
-# # schedule.every(30).minutes.do(mv_gen_disk_sta)
-# schedule.every().minute.do(mv_gen_disk_sta)
+# # schedule.every(30).minutes.do(mv_disksta)
+# schedule.every(5).seconds.do(mv_disksta)
 #
 #
 # # #生成硬盘动态信息文件
-# # schedule.every(10).minutes.do(mv_gen_disk_dyn)
-# schedule.every().minute.do(mv_gen_disk_dyn)
+# # schedule.every(10).minutes.do(mv_diskdyn)
+# schedule.every(5).seconds.do(mv_diskdyn)
 #
 # # #生成安装信息文件
-# # schedule.every().hour.do(mv_gen_installation)
-# schedule.every().minute.do(mv_gen_installation)
+# # schedule.every().hour.do(mv_install)
+# schedule.every().minute.do(mv_install)
 
 # #生成内存信息文件
-# schedule.every(10).seconds.do(mv_gen_mem_dyn)
-# schedule.every().minute.do(mv_gen_mem_dyn)
+# schedule.every(10).seconds.do(mv_memdyn)
+# schedule.every(5).seconds.do(mv_memdyn)
 #
-# # schedule.every().hour.do(mv_gen_mem_sta)
-# schedule.every().minute.do(mv_gen_mem_sta)
+# # schedule.every().hour.do(mv_memsta)
+# schedule.every(5).seconds.do(mv_memsta)
 
 # #生成进程信息文件
-# schedule.every().hour.do(mv_gen_pidfile)
-# schedule.every().minute.do(mv_gen_pidfile)
+# schedule.every().hour.do(mv_pid)
+# schedule.every(5).seconds.do(mv_pid)
 #
 # # #生成服务信息文件
-# # schedule.every().hour.do(mv_gen_srvifile)
-# schedule.every().minute.do(mv_gen_srvifile)
+# # schedule.every().hour.do(mv_srv)
+# schedule.every(5).seconds.do(mv_srv)
 
 # #生成网络信息文件
-# schedule.every().hour.do(mv_gen_netfile)
-schedule.every(10).seconds.do(mv_gen_netfile)
+# schedule.every().hour.do(mv_net)
+# schedule.every(5).seconds.do(mv_net)
 
 # # #FTP传输所有信息文件到服务器
 # # schedule.every(10).minutes.do(mv_upload)
-# schedule.every(2).minutes.do(mv_upload)
+schedule.every(5).seconds.do(mv_upload)
 
 
 while True:

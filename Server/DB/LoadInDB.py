@@ -1,8 +1,9 @@
 import os,datetime
-from Server_Config import *
-from Server.DB.MySQLModel import clt_filelist,clt_filelist_his
-from DB_Access import DBSession
+from Server.DB.MySQLModel import clt_filelist,clt_filelist_his,file_type
+from Server.DB.DB_Access import DBSession
+from Server.Server_Config import BACKUP
 import shutil
+
 class LoadFile(object):
 
     def __init__(self,filepath):
@@ -10,36 +11,17 @@ class LoadFile(object):
 
     def set_filetype(self,filename):
         #根据文件名设定文件类型
-        if board_file_filter in filename:
-            file_type = 'B'
-        elif cpu_file_filter in filename:
-            file_type = 'C'
-        elif disk_file_filter in filename:
-            if 'dynamic' in filename:
-                file_type = 'DD'
-            elif 'static' in filename:
-                file_type = 'DS'
-            else:
-                file_type = 'X'
-        elif installation_file_filter in filename:
-            file_type = 'I'
-        elif pid_file_filter in filename:
-            file_type = 'P'
-        elif memory_file_filter in filename:
-            if 'dynamic' in filename:
-                file_type = 'MD'
-            elif 'static' in filename:
-                file_type = 'MS'
-            else:
-                file_type = 'X'
-        elif service_file_filter in filename:
-            file_type = 'S'
-        elif net_file_filter in filename:
-            file_type = 'N'
-        else:
-            file_type = 'X'
+        session=DBSession()
+        db_filetype = session.query(file_type).all()
+        typedict = {}
+        for i in db_filetype:
+            typedict[i.filter] = i.file_type
+        session.close()
+        for key in typedict:
+            if key in filename:
+                self.__filetype = typedict[key]
+                break
 
-        self.__filetype=file_type
 
     def __unique_file(self,filename):
         session = DBSession()
@@ -82,7 +64,7 @@ class LoadFile(object):
         session = DBSession()
         clt_filelist_check = session.query(clt_filelist).filter(clt_filelist.file_name==filename).filter(clt_filelist.State=='O').first()
         if clt_filelist_check is not None:
-            clt_filelist_his_record=clt_filelist_his(file_name=clt_filelist_check.file_name,file_path=bakup_path,
+            clt_filelist_his_record=clt_filelist_his(file_name=clt_filelist_check.file_name,file_path=BACKUP,
                                                      file_type=clt_filelist_check.file_type,file_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),
                                                      State=clt_filelist_check.State)
         else:
@@ -92,6 +74,6 @@ class LoadFile(object):
         session.commit()
 
         try:
-            shutil.move(os.path.join(clt_filelist_check.file_path,clt_filelist_check.file_name),bakpath)
+            shutil.move(os.path.join(clt_filelist_check.file_path,clt_filelist_check.file_name),BACKUP)
         except Exception as e:
             print("文件移动失败",e)

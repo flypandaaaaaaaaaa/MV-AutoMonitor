@@ -1,8 +1,8 @@
 import yaml, os
-from MySQL_Model_Cls import service_info
-from DB_Access import DBSession
-from Server_Config import *
-import Load_INDB_cls
+from Server.DB.MySQLModel import service_info
+from Server.DB.DB_Access import DBSession
+from Server.Server_Config import WORKPATH,BACKUP
+from Server.DB.LoadInDB import LoadFile
 
 
 def mv_load_srv():
@@ -12,7 +12,7 @@ def mv_load_srv():
 
 
     try:
-        mv_load_file=Load_INDB_cls.load_file_indb(Info_FilePath)
+        mv_load_file=LoadFile(WORKPATH)
 
         #获取S类型记录
         SRV_File_List=mv_load_file.get_filelist('S')
@@ -27,7 +27,7 @@ def mv_load_srv():
         Client_id = single_file.file_name.split('_')[0]
 
         #打开文件
-        with open(os.path.join(Info_FilePath, single_file.file_name), 'r') as f:
+        with open(os.path.join(WORKPATH, single_file.file_name), 'r') as f:
             service_info_list = yaml.load(f.read())
             for single_record in service_info_list:
 
@@ -49,7 +49,7 @@ def mv_load_srv():
         #整个文件处理完成后，将文件状态置为 O
         mv_load_file.set_filestate(single_file.file_name, 'O')
         #处理完成后将记录移动到历史表中
-        mv_load_file.move_file(single_file.file_name,bakup_path)
+        mv_load_file.move_file(single_file.file_name,BACKUP)
 
     #关闭数据库链接
     session.close()

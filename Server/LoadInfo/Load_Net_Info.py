@@ -1,8 +1,8 @@
 import yaml, os
-from MySQL_Model_Cls import net_info
-from DB_Access import DBSession
-from Server_Config import *
-import Load_INDB_cls
+from Server.DB.MySQLModel import net_info
+from Server.DB.DB_Access import DBSession
+from Server.Server_Config import WORKPATH,BACKUP
+from Server.DB.LoadInDB import LoadFile
 
 
 
@@ -12,7 +12,7 @@ def mv_load_net():
     session = DBSession()
 
     try:
-        mv_load_file = Load_INDB_cls.load_file_indb(Info_FilePath)
+        mv_load_file = LoadFile(WORKPATH)
 
         # 获取N类型记录
         Net_File_List = mv_load_file.get_filelist('N')
@@ -27,7 +27,7 @@ def mv_load_net():
 
 
         #打开文件
-        with open(os.path.join(Info_FilePath, single_file.file_name), 'r') as f:
+        with open(os.path.join(WORKPATH, single_file.file_name), 'r') as f:
             net_dic = yaml.load(f.read())
             #开始把记录载入数据库
             new_net_record = net_info(Client_id=Client_id,
@@ -50,7 +50,7 @@ def mv_load_net():
         #整个文件处理完成后，将文件状态置为 O
         mv_load_file.set_filestate(single_file.file_name, 'O')
         #处理完成后将记录移动到历史表中
-        mv_load_file.move_file(single_file.file_name,bakup_path)
+        mv_load_file.move_file(single_file.file_name,BACKUP)
 
         # 关闭数据库链接
     session.close()

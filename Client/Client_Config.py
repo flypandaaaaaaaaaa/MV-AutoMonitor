@@ -10,10 +10,10 @@ MYID='100'
 
 
 ##FTP相关配置
-HOST = '47.104.161.61'
+HOST = ''
 PORT =22
-USERNAME = 'mvmonitor'
-PASSWORD = 'microvast123'
+USERNAME = ''
+PASSWORD = ''
 
 ##远端目录需要写名全路径，以 / 结尾
 REMOTE='/app/auto-monitor/'

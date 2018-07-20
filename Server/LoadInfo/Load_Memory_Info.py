@@ -1,8 +1,8 @@
 import yaml, os
-from MySQL_Model_Cls import memory_static_info,memory_dynamic_info
-from DB_Access import DBSession
-from Server_Config import *
-import Load_INDB_cls
+from Server.DB.MySQLModel import memory_static_info,memory_dynamic_info
+from Server.DB.DB_Access import DBSession
+from Server.Server_Config import WORKPATH,BACKUP
+from Server.DB.LoadInDB import LoadFile
 
 
 
@@ -15,7 +15,7 @@ def mv_load_st_mem():
     session = DBSession()
 
     try:
-        mv_load_file=Load_INDB_cls.load_file_indb(Info_FilePath)
+        mv_load_file=LoadFile(WORKPATH)
 
         #获取MS类型记录
         MEM_File_List=mv_load_file.get_filelist('MS')
@@ -30,7 +30,7 @@ def mv_load_st_mem():
 
 
         # 判断是否是静态信息文件,如果是，则录入静态信息表
-        with open(os.path.join(Info_FilePath, single_file.file_name), 'r') as f:
+        with open(os.path.join(WORKPATH, single_file.file_name), 'r') as f:
             memory_static_info_list = yaml.load(f.read())
 
             for single_record in memory_static_info_list:
@@ -70,7 +70,7 @@ def mv_load_st_mem():
         #整个文件处理完成后，将文件状态置为 O
         mv_load_file.set_filestate(single_file.file_name, 'O')
         #处理完成后将记录移动到历史表中
-        mv_load_file.move_file(single_file.file_name,bakup_path)
+        mv_load_file.move_file(single_file.file_name,BACKUP)
 
     ##关闭数据库链接
     session.close()
@@ -81,7 +81,7 @@ def mv_load_dy_mem():
     session = DBSession()
 
     try:
-        mv_load_file = Load_INDB_cls.load_file_indb(Info_FilePath)
+        mv_load_file = LoadFile(WORKPATH)
 
         # 获取MD类型记录
         MEM_File_List = mv_load_file.get_filelist('MD')
@@ -96,7 +96,7 @@ def mv_load_dy_mem():
 
 
         #打开文件
-        with open(os.path.join(Info_FilePath, single_file.file_name), 'r') as f:
+        with open(os.path.join(WORKPATH, single_file.file_name), 'r') as f:
             memory_dynamic_dic = yaml.load(f.read())
             #开始把记录载入数据库
             new_memory_dynamic_record = memory_dynamic_info(Client_id=Client_id,
@@ -117,7 +117,7 @@ def mv_load_dy_mem():
         #整个文件处理完成后，将文件状态置为 O
         mv_load_file.set_filestate(single_file.file_name, 'O')
         #处理完成后将记录移动到历史表中
-        mv_load_file.move_file(single_file.file_name,bakup_path)
+        mv_load_file.move_file(single_file.file_name,BACKUP)
 
     # 关闭数据库链接
     session.close()

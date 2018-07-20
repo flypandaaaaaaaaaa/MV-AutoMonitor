@@ -1,9 +1,9 @@
 import yaml, os
-import Load_INDB_cls
-from MySQL_Model_Cls import disk_dynamic_info,disk_static_info
-from DB_Access import DBSession
-from Server_Config import *
-from convert_db_parameter import  convert_db_par
+from Server.DB.MySQLModel import disk_dynamic_info,disk_static_info
+from Server.DB.DB_Access import DBSession
+from Server.DB.convert_db_parameter import  convert_db_par
+from Server.Server_Config import WORKPATH,BACKUP
+from Server.DB.LoadInDB import LoadFile
 
 
 #向数据库中录入内存静态信息和动态信息
@@ -14,7 +14,7 @@ def mv_load_st_disk():
     session = DBSession()
 
     try:
-        mv_load_file=Load_INDB_cls.load_file_indb(Info_FilePath)
+        mv_load_file=LoadFile(WORKPATH)
 
         #获取DS类型记录
         Disk_File_List=mv_load_file.get_filelist('DS')
@@ -29,7 +29,7 @@ def mv_load_st_disk():
         Client_id = single_file.file_name.split('_')[0]
 
         # 打开文件
-        with open(os.path.join(Info_FilePath, single_file.file_name), 'r') as f:
+        with open(os.path.join(WORKPATH, single_file.file_name), 'r') as f:
             disk_static_info_list = yaml.load(f.read())
 
             for single_record in disk_static_info_list:
@@ -82,7 +82,7 @@ def mv_load_st_disk():
         #整个文件处理完成后，将文件状态置为 O
         mv_load_file.set_filestate(single_file.file_name, 'O')
         #处理完成后将记录移动到历史表中
-        mv_load_file.move_file(single_file.file_name,bakup_path)
+        mv_load_file.move_file(single_file.file_name,BACKUP)
 
     # 关闭数据库链接
     session.close()
@@ -93,7 +93,7 @@ def mv_load_dy_disk():
     session = DBSession()
 
     try:
-        mv_load_file = Load_INDB_cls.load_file_indb(Info_FilePath)
+        mv_load_file = LoadFile(WORKPATH)
 
         # 获取DD类型记录
         Disk_File_List = mv_load_file.get_filelist('DD')
@@ -105,7 +105,7 @@ def mv_load_dy_disk():
         #获取文件头，客户端ID
         Client_id = single_file.file_name.split('_')[0]
         #打开文件
-        with open(os.path.join(Info_FilePath, single_file.file_name), 'r') as f:
+        with open(os.path.join(WORKPATH, single_file.file_name), 'r') as f:
             disk_dynamic_list = yaml.load(f.read())
             for single_record in disk_dynamic_list:
 
@@ -132,7 +132,7 @@ def mv_load_dy_disk():
         #整个文件处理完成后，将文件状态置为 O
         mv_load_file.set_filestate(single_file.file_name, 'O')
         #处理完成后将记录移动到历史表中
-        mv_load_file.move_file(single_file.file_name,bakup_path)
+        mv_load_file.move_file(single_file.file_name,BACKUP)
 
     # 关闭数据库链接
     session.close()

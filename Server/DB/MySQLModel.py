@@ -265,6 +265,7 @@ class file_type(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     file_type = Column(String(100))
     file_type_name = Column(String(100))
+    filter=Column(String(20))
 
 class file_state(Base):
     __tablename__ = 'file_state'
